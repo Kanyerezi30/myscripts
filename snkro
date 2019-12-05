@@ -28,4 +28,21 @@ echo "=================DONE WITH MYKROBE FOR $i=================================
 done
 echo "==============================MYKROBE COMPLETE========================================"
 #Convert csv to tab delimited
+echo "STARTING ON CONVERSION"
+for i in `ls *.csv`
+do
+echo "Converting $i"
+cut -d, -f1-3,12,13 $i | sed -e 's/,/\t\t/g' -e 's/"//g' -e '1d' | sed '1iSAMPLE ID\t\t  DRUG\t\t\
+SUSCEPTIBILITY\t\tSPECIES\t\tLINEAGE' > ${i}.tab
+echo "===========================DONE CONVERTING $i============================================="
+done
+echo "============================DONE WITH CONVERSION============================================="
 
+#Convert tab to pdf
+echo "Converting to pdfs now"
+for i in `ls *tab`
+do
+echo "Converting $i to pdf"
+enscript $i --output=- | ps2pdf - > ${i}.pdf
+echo "=============Done converting $i to pdf================================================"
+done
